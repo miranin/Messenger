@@ -7,7 +7,13 @@
 
 import UIKit
 
+private let reuseIdentifier = "ConversationCell"
+
 class ConversationController: UIViewController {
+   
+    
+    
+    private let tableView = UITableView()
     
     
     
@@ -40,10 +46,26 @@ class ConversationController: UIViewController {
         
         view.backgroundColor = .white
         configureNavigationBar()
+        configureTableView()
         
         let image = UIImage(systemName: "person.circle.fill")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
                                                            target: self, action: #selector(showProfile))
+        
+    }
+    
+    func configureTableView() {
+        
+        tableView.backgroundColor = .white
+        tableView.rowHeight = 80
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        
+        view.addSubview(tableView)
+        tableView.frame = view.frame
+        
         
     }
     
@@ -67,8 +89,33 @@ class ConversationController: UIViewController {
     }
     
     
+}
+
+// MARK: - UITableViewDelegate
+
+
+
+extension ConversationController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+    }
+}
+
+
+// MARK: - UITableViewDataSource
+
+
+extension ConversationController: UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
     
-    
-    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+        cell.textLabel?.textColor = .black
+        cell.textLabel?.text = "TEST CELL"
+        cell.backgroundColor = .white
+        return cell
+    }
 }
